@@ -18,9 +18,8 @@ public class ImagePresenter {
     }
 
     private void shift(int offset) {
-
         display.clear();
-
+        display.paint(image, offset);
         if (offset > 0)
             display.paint(image.previous(), offset - display.getWidth());
         else
@@ -28,6 +27,7 @@ public class ImagePresenter {
     }
 
     private void released(int offset) {
+
         if (Math.abs(offset) >= display.getWidth() / 2)
             image = offset > 0 ? image.previous() : image.next();
         repaint();

@@ -11,6 +11,7 @@ public class PreviousImageCommand implements Command{
 
     @Override
     public void execute() {
+        display.clear();
         display.paint(display.image().previous(), 0);
     }
 }
