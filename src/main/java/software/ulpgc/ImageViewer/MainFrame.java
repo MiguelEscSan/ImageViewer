@@ -17,7 +17,8 @@ public class MainFrame extends JFrame {
     public MainFrame() throws HeadlessException {
         this.commands = new HashMap<>();
         setTitle("Image Viewer");
-        setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        //setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        setSize(800, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -27,12 +28,12 @@ public class MainFrame extends JFrame {
 
     private Component createButtons() {
         JPanel panel = new JPanel();
-        panel.add(creteButton("<"));
-        panel.add(creteButton(">"));
+        panel.add(createButton("<"));
+        panel.add(createButton(">"));
         return panel;
     }
 
-    private Component creteButton(String option) {
+    private Component createButton(String option) {
         JButton button = new JButton(option);
         button.addActionListener(e -> commands.get(option).execute());
         return button;

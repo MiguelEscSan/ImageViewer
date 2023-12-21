@@ -13,8 +13,8 @@ public class Main {
     public static void main(String[] args) {
         MainFrame frame = new MainFrame();
         Image image = new FileImageLoader(new File(root)).load();
-        ImagePresenter presenter = new ImagePresenter(frame.imageDisplay());
-        presenter.show(image);
+        ImagePresenter presenter = new ImagePresenter(image, frame.imageDisplay());
+        presenter.show();
         frame.addCommand("<", new PreviousImageCommand(frame.imageDisplay()));
         frame.addCommand(">", new NextImageCommand(frame.imageDisplay()));
         frame.setVisible(true);

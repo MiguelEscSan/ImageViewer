@@ -3,7 +3,7 @@ package software.ulpgc.ImageViewer.swing;
 import software.ulpgc.ImageViewer.interfaces.Image;
 import software.ulpgc.ImageViewer.interfaces.ImageDisplay;
 import software.ulpgc.ImageViewer.model.Resizer;
-import software.ulpgc.ImageViewer.model.Paint;
+import software.ulpgc.ImageViewer.model.Picture;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,9 +26,8 @@ public class SwingImageDisplay extends JPanel implements ImageDisplay {
     private Shift shift = Shift.Null;
     private Released released = Released.Null;
     private int initShift;
-    private List<Paint> paints = new ArrayList<>();
-
-
+    private List<Picture> paints = new ArrayList<>();
+    private Pressed pressed = Pressed.Null;
 
     public SwingImageDisplay() {
         this.addMouseListener(mouseListener());
@@ -42,12 +41,16 @@ public class SwingImageDisplay extends JPanel implements ImageDisplay {
             @Override
             public void mousePressed(MouseEvent e) {
                 initShift = e.getX();
+                pressed.in(initShift);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                released.offset(e.getX() - initShift);
+
+                released.at(e.getX() - initShift);
+
             }
+
 
             @Override
             public void mouseEntered(MouseEvent e) {}
@@ -61,9 +64,9 @@ public class SwingImageDisplay extends JPanel implements ImageDisplay {
         return new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                shift.offset(e.getX() - initShift);
-            }
 
+                shift.to(e.getX() - initShift);
+            }
             @Override
             public void mouseMoved(MouseEvent e) {}
         };
@@ -76,10 +79,10 @@ public class SwingImageDisplay extends JPanel implements ImageDisplay {
     }
 
     @Override
-    public void paint(Image image, int offset) {
-        this.image = image;
-        this.bitmap = load(image.name());
-        paints.add(new Paint(image, offset));
+    public void paint(Image newImage, int offset) {
+        this.image = newImage;
+        bitmap = load(this.image.name());
+        paints.add(new Picture(image, offset));
         this.repaint();
     }
 
@@ -87,8 +90,8 @@ public class SwingImageDisplay extends JPanel implements ImageDisplay {
     public void paint(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
-
-        for (Paint paint : paints) {
+        System.out.println(image.name());
+        for (Picture paint : paints) {
             bitmap = load(paint.image().name());
             if (paint.image() != null) {
                 Resizer resizer = new Resizer(new Dimension(this.getWidth(), this.getHeight()));
@@ -116,7 +119,10 @@ public class SwingImageDisplay extends JPanel implements ImageDisplay {
         this.released = released != null ? released : Released.Null;
     }
 
-
+    @Override
+    public void on(Pressed pressed) {
+        this.pressed = pressed != null ? pressed : Pressed.Null;
+    }
 
     private BufferedImage load(String name){
         try {
@@ -124,4 +130,6 @@ public class SwingImageDisplay extends JPanel implements ImageDisplay {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }}
+    }
+
+}

@@ -8,13 +8,19 @@ public interface ImageDisplay {
     void clear();
     void on(Shift shift);
     void on(Released released);
+    void on(Pressed pressed);
 
     interface Shift {
         Shift Null = offset -> {};
-        void offset(int offset);
+        void to(int offset);
     }
     interface Released {
         Released Null = offset -> {};
-        void offset(int offset);
+        void at(int offset);
+    }
+
+    interface Pressed {
+        Pressed Null = offset -> {};
+        void in(int offset);
     }
 }
